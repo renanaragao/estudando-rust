@@ -1,0 +1,6 @@
+[package]
+name = "loops"
+version = "0.1.0"
+authors = ["Renan Aragão <renanferreiradearagao@yahoo.com.br>"]
+
+[dependencies]
