@@ -1,0 +1,3 @@
+- mod server para importar o module e o use para usar os elementos publicos do módulo;
+- quando crido um módulo em um arquivo separado, o nome do arquivo é o nome do módulo
+    
