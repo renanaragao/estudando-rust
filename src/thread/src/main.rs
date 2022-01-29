@@ -1,10 +1,11 @@
-use std::sync::Arc;
+use std::sync::{mpsc, Arc};
 use std::thread;
 use std::time::Duration;
 
 fn main() {
     loop_thread();
     closure_thread();
+    channel_thread();
 }
 
 fn loop_thread() {
@@ -34,4 +35,41 @@ fn closure_thread() {
     println!("Here's a vector: {:?}", v);
 
     handle.join().unwrap();
+}
+
+fn channel_thread() {
+    let (tx, rx) = mpsc::channel();
+
+    let tx1 = tx.clone();
+    thread::spawn(move || {
+        let vals = vec![
+            String::from("hi"),
+            String::from("from"),
+            String::from("the"),
+            String::from("thread"),
+        ];
+
+        for val in vals {
+            tx1.send(val).unwrap();
+            thread::sleep(Duration::from_secs(1));
+        }
+    });
+
+    thread::spawn(move || {
+        let vals = vec![
+            String::from("more"),
+            String::from("messages"),
+            String::from("for"),
+            String::from("you"),
+        ];
+
+        for val in vals {
+            tx.send(val).unwrap();
+            thread::sleep(Duration::from_secs(1));
+        }
+    });
+    
+    for received in rx {
+        println!("Got: {}", received);
+    }
 }
